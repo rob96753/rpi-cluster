@@ -1,0 +1,52 @@
+- name: Playbook to add users and groups
+  hosts: RPICluster
+  become: true
+  tasks:
+    - name: Add the group "devs" (developers)
+      group: 
+        name: devs
+        state: present
+    - name: Add the group "wheel"
+      group:
+        name: wheel
+        state: present
+    - name: Add the 'wheel' group to sudoers
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) ALL'
+        validate: 'visudo -cf %s'
+    - name: Add the user "rob"
+      user:
+        name: rob
+        state: present
+        create_home: yes
+        shell: /bin/bash
+        groups: devs, wheel
+        append: yes
+        password: $6$QZ4lB6doxQSK3d3Y$PNqjuqy25dI1G6QwYFLBOrssLsh8Gq6.xJ9VuMAEjAqWE3r5uQH1NPHJ7oY/Gx4Ls7Gdkvzrcv0vmJUTeO757/
+        update_password: always
+    - name: Add the user "ansible"
+      user:
+        name: ansible
+        state: present
+        create_home: yes
+        shell: /bin/bash
+        groups: devs
+        append: yes
+        
+        password: $6$QZ4lB6doxQSK3d3Y$PNqjuqy25dI1G6QwYFLBOrssLsh8Gq6.xJ9VuMAEjAqWE3r5uQH1NPHJ7oY/Gx4Ls7Gdkvzrcv0vmJUTeO757/
+        update_password: always
+    - name: Upload the authorized public key for "rob"
+      authorized_key:
+          user: rob
+          state: present
+          key: "{{ lookup('file', '/home/rob/.ssh/id_ed25519.pub') }}"
+    - name: Upload the authorized public key for "ansible"
+      authorized_key:
+        user: ansible
+        state: present
+        key: "{{ lookup('file', '/home/rob/.ssh/ansible.pub') }}"
+
+      

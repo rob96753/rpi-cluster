@@ -1,0 +1,26 @@
+- hosts: RPI
+  become: true
+  tasks:
+    - name: Add the group "devs"
+      group: 
+        name: devs
+        state: present
+    - name: Add the user "rob"
+      user:
+        name: rob
+        home: /home/rob
+        shell: /bin/bash
+        group: devs
+    - name: Add the user "ansible"
+      user:
+        name: ansible
+        home: /home/ansible
+        shell: /bin/bash
+    - name: Copy rob ssh keys to hosts
+      command: sshpass ssh-copy-id -i /home/rob/.ssh/id_ed25519.pub
+    - name: Copy ansible ssh keys to hosts
+      command: sshpass ssh-copy-id -i /home/rob/.ssh/ansible.pub
+
+        
+
+  
