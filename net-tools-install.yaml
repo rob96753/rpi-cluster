@@ -1,0 +1,9 @@
+- name: Playbook to update repositories and upgrade nodes
+  hosts: RPICluster
+  become: true
+  tasks:
+    - name: Update apt install net-tools
+      apt: 
+        name: net-tools
+        update_cache: yes
+        state: latest
