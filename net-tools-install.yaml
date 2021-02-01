@@ -1,7 +1,10 @@
 - name: Playbook to update repositories and upgrade nodes
-  hosts: RPICluster
+  hosts: NFS
   become: true
   tasks:
+    - name: Update apt repository
+      apt:
+        update_cache: yes
     - name: Update apt install net-tools
       apt: 
         name: net-tools
