@@ -1,0 +1,28 @@
+hosts: RPICluster
+become: true
+tasks:
+  - name: Add the group "devs"
+    group: 
+      name: devs
+      state: present
+  - name: Add the user "rob"
+    user:
+      name: rob
+      home: /home/rob
+      shell: /bin/bash
+      group: devs
+  - name: Add the user "ansible"
+    user:
+      name: ansible
+      home: /home/ansible
+      shell: /bin/bash
+  - name: add ssh key for rob
+    tags: always
+    authorized_key:
+      user: rob
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbjXo+PRDyI9VjnveLLN7svjBnpCilDjr3V45nFJkEB rob user account key"
+  - name: add ssh key for ansible
+    tags: always
+    authorized_key:
+      user: rob
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFU6szaDDlx/dBgLtUuEMExHXSseBfN0zgXxV/MPzJa ansible key"

@@ -1,0 +1,19 @@
+- hosts: RPICluster
+  become: true
+  tasks:
+  - name: Rename hosts
+    tags: rename
+    hostname:
+        name: "{{ host_name }}"
+    loop: "{{ groups['RPICluster']}}"
+
+  - name: Copy readme file to hostname
+    tags: copy
+    copy:
+      src: readme.txt
+      dest: /home/ubuntu
+      owner: ubuntu
+      group: ubuntu
+      mode:  0644
+
+
