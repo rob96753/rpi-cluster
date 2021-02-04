@@ -1,19 +1,16 @@
 [KVM]
 192.168.122.228
 
-[NFS]
-192.168.189.171 host_name=dbServer01
+[WorkStation]
+127.0.0.1
 
-[RPICluster]
-192.168.189.104 host_name=k8Master0
-192.168.189.159 host_name=k8Master1
-192.168.189.181 host_name=k8Worker0
-192.168.189.237 host_name=k8Worker1
+[NFS]
+192.168.189.171 
 
 [RPIMaster]
-192.168.189.104 host_name=k8Master0
-192.168.189.159 host_name=k8Master1
+192.168.189.104
+192.168.189.159
 
 [RPIWorker]
-192.168.189.181 host_name=k8Worker-0
-192.168.189.237 host_name=k8Worker-1
+192.168.189.181
+192.168.189.237

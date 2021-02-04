@@ -1,0 +1,8 @@
+- name: Playbook to update repositories and install net-tools
+  hosts: all
+  become: true
+  tasks:
+    - name: Update apt repository
+      apt:
+        update_cache: yes
+

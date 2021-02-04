@@ -1,0 +1,41 @@
+
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: update repository index
+      tags: always    
+      apt: 
+        update_cache: yes
+        cache_valid_time: 3600  
+      changed_when: false
+    
+    - name: upgrade servers
+      tags: always
+      apt:
+        upgrade: yes
+      changed_when: false
+
+- hosts: KVM
+  become: true
+  roles:
+  - KVM
+
+- hosts: NFS
+  become: true
+  roles:
+  - NFS
+
+- hosts: RPIMaster
+  become: true
+  roles:
+  - RPIMaster
+
+- hosts: RPIWorker
+  become: true
+  roles:
+  - RPIWorker
+
+- hosts: WorkStation
+  become: true
+  roles:
+  - WorkStation

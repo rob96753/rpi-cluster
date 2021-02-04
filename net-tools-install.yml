@@ -1,5 +1,5 @@
-- name: Playbook to update repositories and upgrade nodes
-  hosts: NFS
+- name: Playbook to update repositories and install net-tools
+  hosts: all
   become: true
   tasks:
     - name: Update apt repository
@@ -10,3 +10,5 @@
         name: net-tools
         update_cache: yes
         state: latest
+
+#https://github.com/angryip/ipscan/releases/download/3.7.4/ipscan_3.7.4_amd64.deb
