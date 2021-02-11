@@ -1,28 +1,62 @@
-hosts: RPICluster
-become: true
-tasks:
-  - name: Add the group "devs"
-    group: 
-      name: devs
-      state: present
-  - name: Add the user "rob"
-    user:
-      name: rob
-      home: /home/rob
-      shell: /bin/bash
-      group: devs
-  - name: Add the user "ansible"
-    user:
-      name: ansible
-      home: /home/ansible
-      shell: /bin/bash
-  - name: add ssh key for rob
-    tags: always
-    authorized_key:
-      user: rob
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbjXo+PRDyI9VjnveLLN7svjBnpCilDjr3V45nFJkEB rob user account key"
-  - name: add ssh key for ansible
-    tags: always
-    authorized_key:
-      user: rob
-      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFU6szaDDlx/dBgLtUuEMExHXSseBfN0zgXxV/MPzJa ansible key"
+- hosts: all
+  become: true
+  tasks:
+    - name: Add the group "devs"
+      group: 
+        name: devs
+        gid: 2000
+        state: present
+    - name: Add the group "ansible"
+      group: 
+        name: ansible
+        gid: 2002
+        state: present
+    - name: Add the group "wheel"
+      group: 
+        name: wheel
+        gid: 2003
+        state: present
+    - name: Allow 'wheel' group to have password-less sudo (idempotent)
+      lineinfile:
+        dest: /etc/sudoers
+        state: present
+        regexp: '^%wheel'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+        validate: 'visudo -cf %s'
+    - name: Add the group "services"
+      group: 
+        name: services
+        gid: 3001
+        system: yes
+        state: present
+    - name: Add the user "rob"
+      user:
+        name: rob
+        home: /home/rob
+        shell: /bin/bash
+        uid: 2001
+        groups: devs, wheel
+    - name: Add the user "rob"
+      user:
+        name: services
+        uid: 3001
+        system: yes
+        state: present
+        group: services
+    - name: add ssh key for rob
+      tags: always  
+      authorized_key:
+        user: rob
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPbjXo+PRDyI9VjnveLLN7svjBnpCilDjr3V45nFJkEB rob user account key"
+    - name: Add the user "ansible"
+      user:
+        name: ansible
+        home: /home/ansible
+        shell: /bin/bash
+        uid: 2002
+        groups: devs, wheel
+    - name: add ssh key for ansible
+      tags: always
+      authorized_key:
+        user: ansible
+        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAFU6szaDDlx/dBgLtUuEMExHXSseBfN0zgXxV/MPzJa ansible key"

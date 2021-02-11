@@ -1,11 +1,11 @@
-- hosts: RPICluster
-  become: true
+- hosts: all
+  become: yes
+  remote_user: ansible
   tasks:
   - name: Rename hosts
     tags: rename
     hostname:
-        name: "{{ host_name }}"
-    loop: "{{ groups['RPICluster']}}"
+        name: "{{ hostname.name }}"
 
   - name: Copy readme file to hostname
     tags: copy

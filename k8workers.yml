@@ -1,0 +1,33 @@
+- hosts: RPIWorker
+  become: true
+  pre_tasks:
+    - name: update repository index
+      tags: always    
+      apt: 
+        update_cache: yes
+        cache_valid_time: 3600  
+      changed_when: false
+    
+    - name: upgrade servers
+      tags: always
+      apt:
+        upgrade: yes
+      changed_when: false
+  tasks:
+    - name: install kubeadm
+      tags: always
+      apt:
+        name: kubeadm
+        state: latest
+
+    - name: install kubectl
+      tags: always
+      apt:
+        name: kubectl
+        state: latest
+
+    - name: install kubelet
+      tags: always
+      apt:
+        name: kubelet
+        state: latest

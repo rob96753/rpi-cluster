@@ -1,0 +1,31 @@
+- hosts: RPIWorker, RPIMaster
+  become: yes
+  tasks:
+  - name: Install Docker
+    apt: 
+      update_cache=yes 
+      name=docker
+      state=latest
+  - name: Deploy Docker daemon.json
+    copy:
+      src: files/docker-daemon.json
+      dest: /etc/docker/daemon.json
+  - name: Ensure group "docker" exists with correct gid
+    ansible.builtin.group:
+      name: docker
+      state: present
+  - name: Add ansible to group Docker
+    user:
+      name: 'ansible'
+      groups: docker
+      append: yes
+  - name: Add rob to group Docker
+    user:
+      name: 'rob'
+      groups: docker
+      append: yes
+  - name: Add rob to group Docker
+    user:
+      name: 'rob'
+      groups: docker
+      append: yes

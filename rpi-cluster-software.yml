@@ -1,0 +1,22 @@
+- hosts: RPIWorker, RPIMaster
+  become: yes
+  vars:
+    item: "fixrtc"
+  tasks:
+    - name: Edit /boot/firmware/cmdline.txt and add
+      replace:
+        path: /boot/firmware/cmdline.txt
+        regexp: '^([\w](?!.*\b{{ item }}\b).*)$'
+        replace: '\1 {{ item }}'
+      with_items:
+      - "cgroup_enable=cpuset"
+      - "cgroup_memory=1"
+      - "cgroup_enable=memory"
+      - "swapaccount=1"
+    - name: Update apt repository
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Upgrade all apt packages
+      apt: upgrade=dist force_apt_get=yes
+    - name: Unconditionally reboot the machine with all defaults
+      reboot:
+

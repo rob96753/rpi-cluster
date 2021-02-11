@@ -1,1 +1,2 @@
-host_name: k8W01
+hostname: 
+  name: k8Worker01
