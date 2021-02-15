@@ -36,7 +36,7 @@
         shell: /bin/bash
         uid: 2001
         groups: devs, wheel
-    - name: Add the user "rob"
+    - name: Add the user "services"
       user:
         name: services
         uid: 3001
